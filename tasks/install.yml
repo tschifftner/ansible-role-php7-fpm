@@ -1,0 +1,35 @@
+---
+
+- name: Set fact for php7_fpm_packages
+  set_fact:
+    php7_fpm_packages: '{{ php7_fpm_default_packages + php7_fpm_group_packages + php7_fpm_host_packages }}'
+
+- name: Remove old pins
+  file:
+    path: /etc/apt/preferences.d/php
+    state: absent
+
+- name: Pin php7
+  copy:
+    dest: /etc/apt/preferences.d/php7
+    content: |
+      Package: {{ php7_fpm_pin_version }}
+      Pin: release a=oldstable
+      Pin-Priority: 700
+
+      Package: *
+      Pin: release a=stable
+      Pin-Priority: 600
+    owner: root
+    group: root
+    mode: '0644'
+  when: php7_fpm_pin_version is defined
+
+- name: Install php7 packages
+  notify: restart php7.0-fpm
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items: '{{php7_fpm_packages}}'
+  when: php7_fpm_packages|length
+

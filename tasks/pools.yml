@@ -1,0 +1,134 @@
+---
+- name: Collect all existing users
+  command: 'cut -d: -f1 /etc/passwd'
+  register: system_users
+  changed_when: false
+
+- name: Ensure php7-fpm pool path exists
+  file:
+    path: '{{ php7_fpm_pool_dir }}'
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Ensure default pool is removed
+  notify: reload php7.0-fpm
+  file:
+    path: '{{ php7_fpm_pool_dir }}/www.conf'
+    state: absent
+  when: php7_fpm_remove_default_pool
+
+- name: 'Get all pools'
+  shell: ls -1 {{ php7_fpm_pool_dir }} | grep 'vhost.*'
+  register: existing_pools
+  changed_when: false
+  ignore_errors: true
+
+- name: Set fact all_php7_fpm_pools
+  set_fact:
+    all_php7_fpm_pools: "{{ (php7_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www'] }}"
+
+- name: Remove vhost.* pools not in all_php7_fpm_pools
+  file:
+    path: '{{ php7_fpm_pool_dir }}/{{ item }}'
+    state: absent
+  when: "{{ ( item | replace('vhost.', '') | replace('.conf', '')) not in all_php7_fpm_pools }}"
+  with_items: '{{existing_pools.stdout_lines}}'
+
+- name: Remove declared pools
+  file:
+    path: '{{ php7_fpm_pool_dir }}/{{ item }}'
+    state: absent
+  when: item.state is defined and item.state == absent
+  with_items: '{{ php7_fpm_pools }}'
+
+- name: Ensure groups exists
+  group:
+    name: '{{ item.group }}'
+    state: present
+  when: item.group is defined
+  with_items: '{{php7_fpm_pools}}'
+
+- name: Ensure users exists
+  user:
+    name: '{{ item.user }}'
+    state: present
+  when: item.user is defined
+  with_items: '{{php7_fpm_pools}}'
+
+- name: Ensure registered paths exist and belong to php7-fpm
+  notify: reload php7.0-fpm
+  file:
+    path: '{{ item[0][item.1] }}'
+    state: directory
+    owner: '{{ item.0.user }}'
+    group: '{{ item.0.group | default(item.0.user) }}'
+    mode: '02771'
+    follow: yes
+  when: php7_fpm_pools|length and item[0][item.1] is defined
+   #and item[0][item.1] is defined and item.0.user in system_users.stdout_lines
+  with_nested:
+    - '{{php7_fpm_pools}}'
+    - ['prefix', 'chroot', 'logs_path', 'tmp_path', 'sessions_path', 'releases_path', 'shared_path']
+
+- name: Ensure project paths exist and belong to php7-fpm
+  notify: reload php7.0-fpm
+  file:
+    path: '{{ item.1 }}'
+    state: directory
+    owner: '{{ item.0.user }}'
+    group: '{{ item.0.group | default(item.0.user) }}'
+    mode: '02771'
+    follow: yes
+  when: item.1 is defined and item.1 != ''
+  with_subelements:
+    - '{{php7_fpm_pools}}'
+    - project_paths
+
+- name: Add logrotate to some directories
+  template:
+    src: 'logrotate.d/{{ item.1 }}'
+    dest: "/etc/logrotate.d/{{ item.1 }}_{{ item.0.name }}"
+  when: php7_fpm_pools|length and item[0][item.1] is defined
+  with_nested:
+    - '{{php7_fpm_pools}}'
+    - ['logs_path']
+
+- name: Add pool cronjobs (currently for sessions only)
+  cron:
+    user: "{{ item.user }}"
+    name: "PHP Pool Cronjob for {{ item.name | default(item.user if item.user is defined else 'www-data') }}"
+    minute: "*/5"
+    job: '/usr/bin/find {{ item.sessions_path }} -mindepth 1 -maxdepth 1 -type f -cmin +24 -print0 -exec rm {} \; >/dev/null 2>&1'
+    state: "{{ item.state | default('present') }}"
+    cron_file: "{{ item.name | default(item.user if item.user is defined else 'www-data') }}"
+  when: php7_fpm_cronjobs is defined and php7_fpm_cronjobs|length and item.sessions_path is defined
+  with_items: '{{php7_fpm_pools}}'
+
+- name: Register cronjobs
+  cron:
+    user: "{{ item.user }}"
+    name: "{{ item.name }}"
+    day: "{{ item.day | default('*') }}"
+    hour: "{{ item.hour | default('*') }}"
+    minute: "{{ item.minute | default('*') }}"
+    month: "{{ item.month | default('*') }}"
+    weekday: "{{ item.weekday | default('*') }}"
+    job: '{{ item.job }}'
+    state: "{{ item.state | default('present') }}"
+    cron_file: "{{ item.cron_file }}"
+    special_time: "{{ item.special_time | default(omit) }}"
+  when: php7_fpm_cronjobs|length
+  with_items: '{{php7_fpm_cronjobs}}'
+
+- name: Configure pools
+  notify: reload php7.0-fpm
+  template:
+    src: 'pool.conf'
+    dest: '{{ php7_fpm_pool_dir }}/vhost.{{ item.name }}.conf'
+    owner: root
+    group: www-data
+    mode: '0644'
+  with_items: '{{php7_fpm_pools}}'
+  when: php7_fpm_pools|length

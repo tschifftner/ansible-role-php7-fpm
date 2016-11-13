@@ -1,0 +1,10 @@
+---
+php7_fpm_config_dirs:
+  - "/etc/php/7.0"
+  - "/etc/php/7.0/fpm/conf.d"
+  - "/etc/php/7.0/fpm/pool.d"
+
+php7_fpm_modules:
+  - mcrypt
+
+php7_fpm_modules_config: []
