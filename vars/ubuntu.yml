@@ -18,3 +18,52 @@ php7_fpm_default_packages:
   - php7.0-apcu
   - fcgiwrap
   - php7.0-mysql
+
+php7_fpm_default_enabled_packages:
+  - igbinary
+  - msgpack
+  - mysqlnd
+  - opcache
+  - pdo
+  - xml
+  - apcu
+  - calendar
+  - ctype
+  - curl
+  - dom
+  - exif
+  - fileinfo
+  - ftp
+  - gd
+  - gettext
+  - iconv
+  - imagick
+  - imap
+  - intl
+  - json
+  - mbstring
+  - mcrypt
+  - memcached
+  - mysqli
+  - pdo_mysql
+  - pdo_sqlite
+  - phar
+  - posix
+  - pspell
+  - readline
+  - redis
+  - shmop
+  - simplexml
+  - sockets
+  - sqlite3
+  - sysvmsg
+  - sysvsem
+  - sysvshm
+  - tidy
+  - tokenizer
+  - wddx
+  - xmlreader
+  - xmlrpc
+  - xmlwriter
+  - xsl
+  - zip

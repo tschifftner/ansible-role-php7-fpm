@@ -24,6 +24,12 @@
     mode: 0644
   notify: restart php7.0-fpm
 
+- name: Enable modules
+  notify: restart php7.0-fpm
+  command: 'phpenmod {{ item }}'
+  with_items: '{{ php7_fpm_default_enabled_packages  }}'
+  changed_when: false
+
 - name: Configure php7-fpm.conf
   notify: restart php7.0-fpm
   template:
