@@ -20,6 +20,7 @@ php7_fpm_default_packages:
   - php7.0-mysql
   - php7.0-mbstring
   - php7.0-zip
+  - libxml2-utils
 
 php7_fpm_default_enabled_packages:
   - igbinary
