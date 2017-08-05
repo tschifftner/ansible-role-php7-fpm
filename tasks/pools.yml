@@ -28,7 +28,7 @@
 
 - name: Set fact all_php7_fpm_pools
   set_fact:
-    all_php7_fpm_pools: "{{ (php7_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www'] }}"
+    all_php7_fpm_pools: (php7_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www']
 
 - name: Remove vhost.* pools not in all_php7_fpm_pools
   file:
