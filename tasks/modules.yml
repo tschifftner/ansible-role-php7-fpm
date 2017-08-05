@@ -16,6 +16,7 @@
   args:
     creates: "/etc/php/{{ php_current_version }}/cli/conf.d/20-{{ item }}.ini"
   with_items: '{{php7_fpm_modules}}'
+  changed_when: false # required for idempotence
 
 #- name: Configure OpCache
 #  template: src="mods-available/opcache.ini" dest="/etc/php/{{ php_current_version }}/mods-available/opcache.ini" force=yes owner=root group=root mode=0644
