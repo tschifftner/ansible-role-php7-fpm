@@ -1,4 +1,5 @@
 ---
+
 - name: Collect all existing users
   command: 'cut -d: -f1 /etc/passwd'
   register: system_users

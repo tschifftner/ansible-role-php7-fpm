@@ -25,6 +25,11 @@
     mode: '0644'
   when: php7_fpm_pin_version is defined
 
+- name: Set repository on ubuntu 14
+  apt_repository:
+    repo: ppa:ondrej/php
+  when: "{{ ansible_distribution == 'Ubuntu' and (ansible_distribution_version|int >= 14) }}"
+
 - name: Install php7 packages
   notify: restart php7.0-fpm
   apt:

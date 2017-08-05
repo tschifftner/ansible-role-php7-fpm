@@ -2,21 +2,21 @@
 - name: Check if ioncube is present
   register: _ioncube_files_exist
   stat:
-    path: '/usr/lib/php/7.0/ioncube/ioncube_loader_lin_{{ php_current_version }}.so'
+    path: '/usr/lib/php/{{ php_current_version }}/ioncube/ioncube_loader_lin_{{ php_current_version }}.so'
   changed_when: false
   ignore_errors: true
 
 - name: Unarchive ioncube archive
   unarchive:
     src: '{{ php7_fpm_ioncube_download_url }}'
-    dest: /usr/lib/php/7.0/
+    dest: "/usr/lib/php/{{ php_current_version }}/"
     copy: no
   when: _ioncube_files_exist.stat.exists is not defined or _ioncube_files_exist.stat.exists == false
 
 - name: Recheck if ioncube is present
   register: _ioncube_files_exist
   stat:
-    path: '/usr/lib/php/7.0/ioncube/ioncube_loader_lin_{{ php_current_version }}.so'
+    path: "/usr/lib/php/{{ php_current_version }}/ioncube/ioncube_loader_lin_{{ php_current_version }}.so"
   changed_when: false
   ignore_errors: true
   when: _ioncube_files_exist.stat.exists is not defined or _ioncube_files_exist.stat.exists == false

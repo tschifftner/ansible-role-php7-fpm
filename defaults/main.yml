@@ -24,9 +24,9 @@ php7_fpm_events_mechanism: ''
 php7_fpm_systemd_interval: 10
 
 # Include additional config files
-php7_fpm_include: ['/etc/php/7.0/fpm/pool.d/*.conf']
+#php7_fpm_include: ['/etc/php/7.0/fpm/pool.d/*.conf']
 
-php7_fpm_pool_dir: '/etc/php/7.0/fpm/pool.d/'
+#php7_fpm_pool_dir: '/etc/php/7.0/fpm/pool.d/'
 php7_fpm_remove_default_pool: true
 
 php7_fpm_pools:

@@ -1,4 +1,5 @@
 ---
+
 - name: Ensure configuration directories exist.
   file:
     path: "{{ item }}"
@@ -9,7 +10,7 @@
 - name: Set fpm php.ini
   template:
     src: php_fpm.ini
-    dest: /etc/php/7.0/fpm/php.ini
+    dest: "/etc/php/{{ php_current_version }}/fpm/php.ini"
     owner: root
     group: root
     mode: 0644
@@ -18,7 +19,7 @@
 - name: Set cli php.ini
   template:
     src: php_cli.ini
-    dest: /etc/php/7.0/cli/php.ini
+    dest: "/etc/php/{{ php_current_version }}/cli/php.ini"
     owner: root
     group: root
     mode: 0644
@@ -34,7 +35,7 @@
   notify: restart php7.0-fpm
   template:
     src: 'php-fpm.conf'
-    dest: '/etc/php/7.0/fpm/php-fpm.conf'
+    dest: '/etc/php/{{ php_current_version }}/fpm/php-fpm.conf'
     owner: root
     group: root
     mode: 0644

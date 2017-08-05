@@ -27,6 +27,9 @@
     php_current_version: "{{ _php7_fpm_version_output.stdout }}"
   when: _php7_fpm_version_output.stdout is defined
 
+- include: vars.yml
+  tags: ['always']
+
 - include: ioncube.yml
   when: php7_fpm_install_ioncube == true
   tags: ['php7-fpm-ioncube']
