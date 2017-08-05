@@ -1,6 +1,7 @@
 ---
-php7_fpm_pin_version: 'php7*'
-php7_fpm_set_as_default_cli: true
+php7_fpm_version: '7.1'
+php7_fpm_pin_version: 'php{{php7_fpm_version}}.*'
+#php7_default_cli_version: '{{ php7_fpm_version }}'
 
 # Used for host variables
 php7_fpm_host_packages: []
@@ -25,10 +26,15 @@ php7_fpm_events_mechanism: ''
 php7_fpm_systemd_interval: 10
 
 # Include additional config files
-#php7_fpm_include: ['/etc/php/7.0/fpm/pool.d/*.conf']
+php7_fpm_include: ['/etc/php/{{ php7_fpm_version }}/fpm/pool.d/*.conf']
 
-#php7_fpm_pool_dir: '/etc/php/7.0/fpm/pool.d/'
+php7_fpm_pool_dir: "/etc/php/{{ php7_fpm_version }}/fpm/pool.d"
 php7_fpm_remove_default_pool: true
+
+php7_fpm_config_dirs:
+  - "/etc/php/{{ php7_fpm_version }}"
+  - "/etc/php/{{ php7_fpm_version }}/fpm/conf.d"
+  - "/etc/php/{{ php7_fpm_version }}/fpm/pool.d"
 
 php7_fpm_pools:
   # define default pool in case php7_fpm_pools is not set

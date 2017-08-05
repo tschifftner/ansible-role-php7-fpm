@@ -30,11 +30,13 @@
   set_fact:
     all_php7_fpm_pools: (php7_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www']
 
+- debug: msg="{{ all_php7_fpm_pools }}"
+
 - name: Remove vhost.* pools not in all_php7_fpm_pools
   file:
     path: '{{ php7_fpm_pool_dir }}/{{ item }}'
     state: absent
-  when: "{{ ( item | replace('vhost.', '') | replace('.conf', '')) not in all_php7_fpm_pools }}"
+  when: ( item | replace('vhost.', '') | replace('.conf', '')) not in all_php7_fpm_pools
   with_items: '{{existing_pools.stdout_lines}}'
 
 - name: Remove declared pools

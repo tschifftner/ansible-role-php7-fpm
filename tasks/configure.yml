@@ -10,7 +10,7 @@
 - name: Set fpm php.ini
   template:
     src: php_fpm.ini
-    dest: "/etc/php/{{ php_current_version }}/fpm/php.ini"
+    dest: "/etc/php/{{ php7_fpm_version }}/fpm/php.ini"
     owner: root
     group: root
     mode: 0644
@@ -19,7 +19,7 @@
 - name: Set cli php.ini
   template:
     src: php_cli.ini
-    dest: "/etc/php/{{ php_current_version }}/cli/php.ini"
+    dest: "/etc/php/{{ php7_fpm_version }}/cli/php.ini"
     owner: root
     group: root
     mode: 0644
@@ -35,12 +35,12 @@
   notify: restart php7.0-fpm
   template:
     src: 'php-fpm.conf'
-    dest: '/etc/php/{{ php_current_version }}/fpm/php-fpm.conf'
+    dest: '/etc/php/{{ php7_fpm_version }}/fpm/php-fpm.conf'
     owner: root
     group: root
     mode: 0644
 
 - name: Set as default cli version
-  command: update-alternatives --set php /usr/bin/php{{ php_current_version }}
+  command: update-alternatives --set php /usr/bin/php{{ php7_default_cli_version }}
   changed_when: false
-  when: php7_fpm_set_as_default_cli == true
+  when: php7_default_cli_version is defined

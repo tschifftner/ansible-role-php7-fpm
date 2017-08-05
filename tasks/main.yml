@@ -15,21 +15,6 @@
 - include: install.yml
   tags: ['php7-fpm-install']
 
-- name: Get php version
-  shell: php --version | head -n 1 | cut -d ' ' -f2 | cut -c1-3
-  register: _php7_fpm_version_output
-  ignore_errors: true
-  changed_when: false
-  tags: ['skip_ansible_lint']
-
-- name: Set php version fact
-  set_fact:
-    php_current_version: "{{ _php7_fpm_version_output.stdout }}"
-  when: _php7_fpm_version_output.stdout is defined
-
-- include: vars.yml
-  tags: ['always']
-
 - include: ioncube.yml
   when: php7_fpm_install_ioncube == true
   tags: ['php7-fpm-ioncube']
