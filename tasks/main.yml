@@ -30,7 +30,7 @@
 
 - name: Start php7-fpm
   service:
-    name: 'php7.0-fpm'
+    name: 'php{{ php7_fpm_version }}-fpm'
     state: started
     enabled: yes
   changed_when: false # required for idempotence

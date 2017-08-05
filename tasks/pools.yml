@@ -14,7 +14,7 @@
     mode: '0755'
 
 - name: Ensure default pool is removed
-  notify: reload php7.0-fpm
+  notify: reload php{{ php7_fpm_version }}-fpm
   file:
     path: '{{ php7_fpm_pool_dir }}/www.conf'
     state: absent
@@ -28,7 +28,7 @@
 
 - name: Set fact all_php7_fpm_pools
   set_fact:
-    all_php7_fpm_pools: (php7_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www']
+    all_php7_fpm_pools: "{{ (php7_fpm_pools | selectattr('name', 'string') | map(attribute='name') | list)  + ['www'] }}"
 
 - debug: msg="{{ all_php7_fpm_pools }}"
 
@@ -61,7 +61,7 @@
   with_items: '{{php7_fpm_pools}}'
 
 - name: Ensure registered paths exist and belong to php7-fpm
-  notify: reload php7.0-fpm
+  notify: reload php{{ php7_fpm_version }}-fpm
   file:
     path: '{{ item[0][item.1] }}'
     state: directory
@@ -76,7 +76,7 @@
     - ['prefix', 'chroot', 'logs_path', 'tmp_path', 'sessions_path', 'releases_path', 'shared_path']
 
 - name: Ensure project paths exist and belong to php7-fpm
-  notify: reload php7.0-fpm
+  notify: reload php{{ php7_fpm_version }}-fpm
   file:
     path: '{{ item.1 }}'
     state: directory
@@ -126,7 +126,7 @@
   with_items: '{{php7_fpm_cronjobs}}'
 
 - name: Configure pools
-  notify: reload php7.0-fpm
+  notify: reload php{{ php7_fpm_version }}-fpm
   template:
     src: 'pool.conf'
     dest: '{{ php7_fpm_pool_dir }}/vhost.{{ item.name }}.conf'

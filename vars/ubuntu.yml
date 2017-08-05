@@ -1,23 +1,23 @@
 ---
 php7_fpm_default_packages:
-  - php7.0-fpm
-  - php7.0-curl
-  - php7.0-gd
-  - php7.0-intl
+  - php{{ php7_fpm_version }}-fpm
+  - php{{ php7_fpm_version }}-curl
+  - php{{ php7_fpm_version }}-gd
+  - php{{ php7_fpm_version }}-intl
   - php-pear
-  - php7.0-imagick
-  - php7.0-imap
-  - php7.0-mcrypt
-  - php7.0-memcached
-  - php7.0-redis
-  - php7.0-pspell
-  - php7.0-sqlite3
-  - php7.0-tidy
-  - php7.0-xmlrpc
-  - php7.0-xsl
-  - php7.0-apcu
+  - php{{ php7_fpm_version }}-imagick
+  - php{{ php7_fpm_version }}-imap
+  - php{{ php7_fpm_version }}-mcrypt
+  - php{{ php7_fpm_version }}-memcached
+  - php{{ php7_fpm_version }}-redis
+  - php{{ php7_fpm_version }}-pspell
+  - php{{ php7_fpm_version }}-sqlite3
+  - php{{ php7_fpm_version }}-tidy
+  - php{{ php7_fpm_version }}-xmlrpc
+  - php{{ php7_fpm_version }}-xsl
+  - php{{ php7_fpm_version }}-apcu
   - fcgiwrap
-  - php7.0-mysql
+  - php{{ php7_fpm_version }}-mysql
   - libxml2-utils
 
 php7_fpm_default_enabled_packages:

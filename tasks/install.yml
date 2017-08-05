@@ -31,7 +31,7 @@
   when: ansible_distribution == 'Ubuntu' and (ansible_distribution_version|int >= 14)
 
 - name: Install php7 packages
-  notify: restart php7.0-fpm
+  notify: restart php{{ php7_fpm_version }}-fpm
   apt:
     name: "{{ item }}"
     state: present
