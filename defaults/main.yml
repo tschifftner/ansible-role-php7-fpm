@@ -1,5 +1,6 @@
 ---
 php7_fpm_pin_version: 'php7*'
+php7_fpm_set_as_default_cli: true
 
 # Used for host variables
 php7_fpm_host_packages: []

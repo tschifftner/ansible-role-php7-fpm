@@ -40,3 +40,7 @@
     group: root
     mode: 0644
 
+- name: Set as default cli version
+  command: update-alternatives --set php /usr/bin/php{{ php_current_version }}
+  changed_when: false
+  when: php7_fpm_set_as_default_cli == true
