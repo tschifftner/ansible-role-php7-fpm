@@ -20,6 +20,7 @@ php7_fpm_default_packages:
   - php{{ php7_fpm_version }}-mysql
   - php{{ php7_fpm_version }}-mbstring
   - php{{ php7_fpm_version }}-zip
+  - php{{ php7_fpm_version }}-soap
   - libxml2-utils
 
 php7_fpm_default_enabled_packages:
