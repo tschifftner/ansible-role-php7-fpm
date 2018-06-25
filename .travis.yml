@@ -30,9 +30,15 @@ install:
   # Install ansible-lint
   - pip install ansible-lint
 
+  # Install required roles
+  - ansible-galaxy install -r tests/requirements.yml --ignore-errors --force
+
 script:
   # Check the role/playbook's syntax.
   - ansible-playbook -i tests/inventory tests/$SITE --syntax-check
+
+  # Run prepare playbook
+  - "ansible-playbook -i tests/inventory tests/prepare.yml --connection=local --become"
 
   # Run the role/playbook with ansible-playbook.
   - ansible-playbook -i tests/inventory tests/$SITE --connection=local --become
