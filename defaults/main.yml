@@ -127,4 +127,4 @@ php7_opcache_ini:
   save_comments: "1"
 
 php7_fpm_install_ioncube: false
-php7_fpm_ioncube_download_url: 'http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz'
+php7_fpm_ioncube_download_url: 'http://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz'
