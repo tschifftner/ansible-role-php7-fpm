@@ -18,7 +18,7 @@ env:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y curl
-  - sudo apt-get purge -y 'php5*'
+  - sudo apt-get purge -y 'php7*'
 
 install:
   # Install Ansible.
