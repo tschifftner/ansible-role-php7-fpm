@@ -81,7 +81,9 @@ after_failure:
   - sudo tail -n150 /var/log/syslog
   - ansible --version
   - ansible-lint --version
-  - sudo ls -l /usr/lib/php7/ioncube/
+  - sudo ls -l /usr/lib/php/7.0/ioncube/
+  - sudo ls -l /usr/lib/php/7.1/ioncube/
+  - sudo ls -l /usr/lib/php/7.2/ioncube/
   - php /var/www/html/index.php
 
 notifications:
