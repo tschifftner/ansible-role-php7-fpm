@@ -15,6 +15,7 @@
     php7_fpm_install_ioncube: true
 
   roles:
+    - tschifftner.sury
     - ansible-role-php7-fpm
 
   tasks:
