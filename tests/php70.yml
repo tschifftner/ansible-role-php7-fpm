@@ -16,7 +16,7 @@
 
   roles:
     - tschifftner.sury
-    - ansible-role-php7-fpm
+    - role_under_test
 
   tasks:
     - name: Create index.php
