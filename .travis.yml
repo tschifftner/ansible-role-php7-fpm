@@ -1,91 +1,37 @@
 ---
-sudo: required
-dist: trusty
-
-language: python
-python: "2.7"
+services: docker
 
 env:
-  - SITE=php70.yml ANSIBLE_VERSION=latest
-  - SITE=php70.yml ANSIBLE_VERSION=2.5.0.0
-
-  - SITE=php71.yml ANSIBLE_VERSION=latest
-  - SITE=php71.yml ANSIBLE_VERSION=2.5.0.0
-
-  - SITE=php72.yml ANSIBLE_VERSION=latest
-  - SITE=php72.yml ANSIBLE_VERSION=2.5.0.0
-
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y curl
-  - sudo apt-get purge -y 'php7*'
-
-install:
-  # Install Ansible.
-  - if [ "$ANSIBLE_VERSION" = "latest" ]; then pip install --no-binary ansible ansible; else pip install --no-binary ansible ansible==$ANSIBLE_VERSION; fi
-
-  # Add ansible.cfg to pick up roles path.
-  - "{ echo '[defaults]'; echo 'roles_path = ../'; } >> ansible.cfg"
-
-  # Install ansible-lint
-  - pip install ansible-lint
-
-  # Install required roles
-  - ansible-galaxy install -r tests/requirements.yml --ignore-errors --force
+#  - distro: centos7
+#  - distro: centos6
+#  - distro: fedora27
+  - distro: ubuntu1804
+#  - distro: ubuntu1604
+#  - distro: ubuntu1404
+#  - distro: ubuntu1204
+  - distro: debian9
+  - distro: debian8
 
 script:
-  # Check the role/playbook's syntax.
-  - ansible-playbook -i tests/inventory tests/$SITE --syntax-check
+  # Configure test script so we can run extra tests after playbook is run.
+  - export container_id=$(date +%s)
+  - export cleanup=false
 
-  # Run prepare playbook
-  - "ansible-playbook -i tests/inventory tests/prepare.yml --connection=local --become"
+  # Download test shim.
+  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
+  - chmod +x ${PWD}/tests/test.sh
 
-  # Run the role/playbook with ansible-playbook.
-  - ansible-playbook -i tests/inventory tests/$SITE --connection=local --become
+  # Run tests.
+  - ${PWD}/tests/test.sh
 
-  # Run the role/playbook again, checking to make sure it's idempotent.
-  - >
-    ansible-playbook -i tests/inventory tests/$SITE --connection=local --become
-    | grep -q 'changed=0.*failed=0'
-    && (echo 'Idempotence test: pass' && exit 0)
-    || (echo 'Idempotence test: fail' && exit 1)
-
-  # ansible-lint checks for best practice
-  - ansible-lint tests/$SITE
-
-  # Check if php is installed
-  - >
-    sudo php -v
-    && (echo 'PHP installed' && exit 0)
-    || (echo 'PHP is not installed' && exit 1)
+  # Ensure php is installed.
+  - 'docker exec --tty ${container_id} env TERM=xterm php -v'
 
   # Check if socket exists
-  - >
-    test -e /run/travis.socket
-    && (echo 'PHP socket exists' && exit 0)
-    || (echo 'PHP socket does not exist' && exit 1)
+  - 'docker exec --tty ${container_id} env TERM=xterm test -e /run/travis.socket'
 
-  - >
-    sudo php -v | grep ionCube
-    && (echo 'ionCube installed' && exit 0)
-    || (echo 'ionCube is not installed' && exit 1)
-
-
-after_failure:
-  # run playbook again to see idempotence failures
-  - ansible-playbook -i tests/inventory tests/$SITE --connection=local --become -vvv
-  - service php7.0-fpm status
-  - sudo php -v
-  - 'ls -lg /etc/php/*/fpm/pool.d/*'
-  - 'ls -l /run/'
-  - sudo tail -n150 /var/log/syslog
-  - ansible --version
-  - ansible-lint --version
-  - sudo ls -l /usr/lib/php/7.0/ioncube/
-  - sudo ls -l /usr/lib/php/7.1/ioncube/
-  - sudo ls -l /usr/lib/php/7.2/ioncube/
-  - php /var/www/html/index.php
+  # Check if ioncube is installed
+  - 'docker exec --tty ${container_id} env TERM=xterm php -v | grep ionCube'
 
 notifications:
-  slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
-  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+   webhooks: https://galaxy.ansible.com/api/v1/notifications/
