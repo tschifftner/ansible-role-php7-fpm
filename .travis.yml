@@ -7,13 +7,17 @@ env:
 #  - distro: fedora27
   - distro: ubuntu1804
     playbook: php70.yml
+    php_version: 7.0
 #  - distro: ubuntu1604
 #  - distro: ubuntu1404
 #  - distro: ubuntu1204
   - distro: debian9
     playbook: php70.yml
+    php_version: 7.0
+
   - distro: debian8
     playbook: php70.yml
+    php_version: 7.0
 
 script:
   # Configure test script so we can run extra tests after playbook is run.
@@ -28,7 +32,7 @@ script:
   - ${PWD}/tests/test.sh
 
   # Ensure php is installed.
-  - 'docker exec --tty ${container_id} env TERM=xterm php -v'
+  - 'docker exec --tty ${container_id} env TERM=xterm php -v | grep "PHP $php_version"'
 
   # Check if socket exists
   - 'docker exec --tty ${container_id} env TERM=xterm test -e /run/travis.socket'
