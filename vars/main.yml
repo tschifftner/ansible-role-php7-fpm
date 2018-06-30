@@ -1,6 +1,0 @@
----
-
-php7_fpm_modules:
-  - mcrypt
-
-php7_fpm_modules_config: []
