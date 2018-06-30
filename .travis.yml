@@ -55,8 +55,8 @@ script:
   - docker exec --tty ${container_id} env TERM=xterm php -i | grep 'memory_limit.*192'
 
   # Check the status of PHP-FPM.
-  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm status
-  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm status | grep 'fpm.service; enabled'
+  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm
+  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm | grep 'fpm.service; enabled'
 
 after_failure:
   - 'docker exec --tty ${container_id} env TERM=xterm php -v'
