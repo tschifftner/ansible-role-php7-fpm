@@ -5,7 +5,7 @@ php7_fpm_default_packages:
   - php{{ php7_fpm_version }}-gd
   - php{{ php7_fpm_version }}-intl
   - php-pear
-  - php{{ php7_fpm_version }}-imagick
+#  - php{{ php7_fpm_version }}-imagick
   - php{{ php7_fpm_version }}-imap
   - php{{ php7_fpm_version }}-mcrypt
   - php{{ php7_fpm_version }}-memcached
