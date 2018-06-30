@@ -23,6 +23,9 @@ php7_fpm_default_packages:
   - php{{ php7_fpm_version }}-soap
   - libxml2-utils
   - php-apcu
+  - php-redis
+  - php-memcached
+  - php-mcrypt
 
 php7_fpm_default_enabled_packages:
   - igbinary
