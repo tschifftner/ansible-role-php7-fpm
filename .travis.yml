@@ -62,7 +62,7 @@ script:
   - 'docker exec --tty ${container_id} env TERM=xterm test -e /run/travis.socket'
 
   # Check if OpCache is installed
-  - docker exec --tty ${container_id} env TERM=xterm php -v | grep ionCube'
+  - docker exec --tty ${container_id} env TERM=xterm php -v | grep 'ionCube'
 
   # Check if ioncube is installed
   - docker exec --tty ${container_id} env TERM=xterm php -v | grep 'OPcache'
@@ -75,6 +75,7 @@ script:
   - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm | grep 'fpm.service; enabled'
 
   # Check php extensions
+  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'apcu'
 #  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'bc-math'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'ctype'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'curl'
@@ -86,10 +87,11 @@ script:
 #  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'mcrypt'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'hash'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'openssl'
+  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'PDO'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'pdo_mysql'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'SimpleXML'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'soap'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'spl'
+  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'SPL'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'libxml'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'xsl'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'zip'
@@ -97,8 +99,9 @@ script:
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'iconv'
 
 after_failure:
-  - 'docker exec --tty ${container_id} env TERM=xterm php -v'
+  - docker exec --tty ${container_id} env TERM=xterm php -v
   - docker exec --tty ${container_id} env TERM=xterm php -i | grep 'memory_limit.*'
+  - docker exec --tty ${container_id} env TERM=xterm php -m
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
