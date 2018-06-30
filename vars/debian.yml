@@ -26,6 +26,7 @@ php7_fpm_default_packages:
   - php-redis
   - php-memcached
   - php-mcrypt
+  - php-imagick
 
 php7_fpm_default_enabled_packages:
   - igbinary
