@@ -7,17 +7,24 @@ env:
 #  - distro: fedora27
   - distro: ubuntu1804
     playbook: php70.yml
-    php_version: 7.0
+    php7_fpm_version: 7.0
 #  - distro: ubuntu1604
 #  - distro: ubuntu1404
 #  - distro: ubuntu1204
+
   - distro: debian9
     playbook: php70.yml
-    php_version: 7.0
+    php7_fpm_version: 7.0
+  - distro: debian9
+    playbook: php71.yml
+    php7_fpm_version: 7.1
+  - distro: debian9
+    playbook: php72.yml
+    php7_fpm_version: 7.2
 
   - distro: debian8
     playbook: php70.yml
-    php_version: 7.0
+    php7_fpm_version: 7.0
 
 script:
   # Configure test script so we can run extra tests after playbook is run.
@@ -31,8 +38,12 @@ script:
   # Run tests.
   - ${PWD}/tests/test.sh
 
-  # Ensure php is installed.
-  - 'docker exec --tty ${container_id} env TERM=xterm php -v | grep "PHP $php_version"'
+  # Ensure PHP is installed and at the right version.
+  - 'docker exec --tty ${container_id} env TERM=xterm which php'
+  - 'docker exec --tty ${container_id} env TERM=xterm test -x /usr/bin/php'
+
+  - 'docker exec --tty ${container_id} env TERM=xterm php --version'
+  - 'docker exec --tty ${container_id} env TERM=xterm /usr/bin/php --version | grep -qF "PHP ${php7_fpm_version}"'
 
   # Check if socket exists
   - 'docker exec --tty ${container_id} env TERM=xterm test -e /run/travis.socket'
@@ -40,5 +51,17 @@ script:
   # Check if ioncube is installed
   - 'docker exec --tty ${container_id} env TERM=xterm php -v | grep ionCube'
 
+  # Ensure PHP configurations have taken effect.
+  - docker exec --tty ${container_id} env TERM=xterm php -i | grep 'memory_limit.*192'
+
+  # Check the status of PHP-FPM.
+  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php7_fpm_version}-fpm status
+  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php7_fpm_version}-fpm status | grep -qF "fpm.service; enabled"
+
+after_failure:
+  - 'docker exec --tty ${container_id} env TERM=xterm php -v'
+  - docker exec --tty ${container_id} env TERM=xterm php -i | grep 'memory_limit.*'
+
 notifications:
-   webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
