@@ -7,24 +7,24 @@ env:
 #  - distro: fedora27
   - distro: ubuntu1804
     playbook: php70.yml
-    php7_fpm_version: 7.0
+    php_version: 7.0
 #  - distro: ubuntu1604
 #  - distro: ubuntu1404
 #  - distro: ubuntu1204
 
   - distro: debian9
     playbook: php70.yml
-    php7_fpm_version: 7.0
+    php_version: 7.0
   - distro: debian9
     playbook: php71.yml
-    php7_fpm_version: 7.1
+    php_version: 7.1
   - distro: debian9
     playbook: php72.yml
-    php7_fpm_version: 7.2
+    php_version: 7.2
 
   - distro: debian8
     playbook: php70.yml
-    php7_fpm_version: 7.0
+    php_version: 7.0
 
 script:
   # Configure test script so we can run extra tests after playbook is run.
@@ -43,7 +43,7 @@ script:
   - 'docker exec --tty ${container_id} env TERM=xterm test -x /usr/bin/php'
 
   - 'docker exec --tty ${container_id} env TERM=xterm php --version'
-  - 'docker exec --tty ${container_id} env TERM=xterm /usr/bin/php --version | grep -qF "PHP ${php7_fpm_version}"'
+  - 'docker exec --tty ${container_id} env TERM=xterm /usr/bin/php --version | grep -qF "PHP ${php_version}"'
 
   # Check if socket exists
   - 'docker exec --tty ${container_id} env TERM=xterm test -e /run/travis.socket'
@@ -55,8 +55,8 @@ script:
   - docker exec --tty ${container_id} env TERM=xterm php -i | grep 'memory_limit.*192'
 
   # Check the status of PHP-FPM.
-  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php7_fpm_version}-fpm status
-  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php7_fpm_version}-fpm status | grep -qF "fpm.service; enabled"
+  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm status
+  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm status | grep -qF "fpm.service; enabled"
 
 after_failure:
   - 'docker exec --tty ${container_id} env TERM=xterm php -v'
