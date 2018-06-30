@@ -19,6 +19,11 @@ php7_fpm_default_packages:
   - fcgiwrap
   - php{{ php7_fpm_version }}-mysql
   - libxml2-utils
+  - php-apcu
+  - php-redis
+  - php-memcached
+#  - php-mcrypt
+  - php-imagick
 
 php7_fpm_default_enabled_packages:
   - igbinary
