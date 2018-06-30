@@ -9,19 +9,20 @@ php7_fpm_default_packages:
   - php{{ php7_fpm_version }}-imap
 #  - php{{ php7_fpm_version }}-mcrypt
 #  - php{{ php7_fpm_version }}-memcached
-  - php{{ php7_fpm_version }}-redis
+#  - php{{ php7_fpm_version }}-redis
   - php{{ php7_fpm_version }}-pspell
   - php{{ php7_fpm_version }}-sqlite3
   - php{{ php7_fpm_version }}-tidy
   - php{{ php7_fpm_version }}-xmlrpc
   - php{{ php7_fpm_version }}-xsl
-  - php{{ php7_fpm_version }}-apcu
+#  - php{{ php7_fpm_version }}-apcu
   - fcgiwrap
   - php{{ php7_fpm_version }}-mysql
   - php{{ php7_fpm_version }}-mbstring
   - php{{ php7_fpm_version }}-zip
   - php{{ php7_fpm_version }}-soap
   - libxml2-utils
+  - php-apcu
 
 php7_fpm_default_enabled_packages:
   - igbinary
