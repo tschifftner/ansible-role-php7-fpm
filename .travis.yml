@@ -56,7 +56,7 @@ script:
 
   # Check the status of PHP-FPM.
   - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm status
-  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm status | grep -qF "fpm.service; enabled"
+  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm status | grep 'fpm.service; enabled'
 
 after_failure:
   - 'docker exec --tty ${container_id} env TERM=xterm php -v'
