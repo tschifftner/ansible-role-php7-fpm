@@ -45,6 +45,7 @@ php7_fpm_pools:
     project_paths: []
 
 php7_fpm_cronjobs: []
+php7_fpm_modules_config: []
 
 # php.ini (cli) settings
 php7_cli_ini_expose_php: On

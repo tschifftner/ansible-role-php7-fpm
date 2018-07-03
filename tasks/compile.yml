@@ -1,0 +1,58 @@
+
+- name: Get php api version
+  shell: php -i | grep 'PHP API' | sed -e 's/PHP API => //'
+  changed_when: false
+  register: _php7_fpm_api_version
+
+- name: set facts
+  set_fact:
+    unarchive_dir: "/opt/{{ module.url | basename | replace('.tgz', '') }}"
+    php7_fpm_api_version: '{{ _php7_fpm_api_version.stdout }}'
+
+- name: Install required apt packages
+  apt:
+    pkg: '{{ item }}'
+    state: present
+  with_items: '{{ module.apt_packages }}'
+  when: module.apt_packages is defined and module.apt_packages|length
+
+- name: 'Extract {{ module.url }}'
+  unarchive:
+    src: '{{ module.url }}'
+    dest: /opt
+    copy: no
+    creates: "{{ unarchive_dir }}"
+
+- name: 'phpize'
+  command: phpize{{ php7_fpm_version }}
+  args:
+    chdir: "{{ unarchive_dir }}"
+    creates: "{{ unarchive_dir }}/configure"
+
+- name: 'configure'
+  command: ./configure --with-php-config=php-config{{ php7_fpm_version }}
+  args:
+    chdir: "{{ unarchive_dir }}"
+    creates: "{{ unarchive_dir }}/config.status"
+
+- name: 'make'
+  command: make
+  args:
+    chdir: "{{ unarchive_dir }}"
+    creates: "{{ unarchive_dir }}/modules/{{ module.name }}.so"
+
+- name: 'make install'
+  command: make install
+  args:
+    chdir: "{{ unarchive_dir }}"
+    creates: "/usr/lib/php/{{ php7_fpm_api_version }}/{{ module.name }}.so"
+
+- name: 'Create ini file'
+  template:
+    src: 'mods-available/{{ module.name }}.ini'
+    dest: '/etc/php/{{ php7_fpm_version }}/mods-available/{{ module.name }}.ini'
+
+- name: Enable module
+  notify: 'restart php{{ php7_fpm_version }}-fpm'
+  command: 'phpenmod {{ module.name }}'
+  changed_when: false

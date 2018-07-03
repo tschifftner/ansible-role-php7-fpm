@@ -1,5 +1,22 @@
 ---
 
+- name: Install devel package
+  apt:
+    pkg: 'php{{ php7_fpm_version }}-dev'
+    state: present
+  when: php7_fpm_compile_modules|length
+
+- name: debug modules
+  debug:
+    msg: '{{ php7_fpm_compile_modules }}'
+
+- name: Compile modules from source
+  include_tasks: 'compile.yml'
+  when: php7_fpm_compile_modules is defined and php7_fpm_compile_modules|length
+  with_items: '{{ php7_fpm_compile_modules }}'
+  loop_control:
+    loop_var: module
+
 - name: Configure php7-fpm modules
   template:
     src: "{{ item }}"
