@@ -7,7 +7,6 @@ php7_fpm_default_packages:
   - php{{ php7_fpm_version }}-gd
   - php{{ php7_fpm_version }}-intl
   - php{{ php7_fpm_version }}-imap
-#  - php{{ php7_fpm_version }}-mcrypt
   - php{{ php7_fpm_version }}-memcached
   - php{{ php7_fpm_version }}-redis
   - php{{ php7_fpm_version }}-pspell
@@ -32,6 +31,11 @@ php7_fpm_compile_modules:
     name: 'mcrypt'
     apt_packages:
       - libmcrypt-dev
+  - url: 'https://pecl.php.net/get/imagick-3.4.3.tgz'
+    name: 'imagick'
+    apt_packages:
+      - pkg-config
+      - libmagickwand-dev
 
 php7_fpm_default_enabled_packages:
   - igbinary
