@@ -124,6 +124,12 @@ script:
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'zip'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'zlib'
 
+  # Check Zend OpCache already loaded
+  - >
+    docker exec --tty ${container_id} env TERM=xterm php -m | grep 'Cannot load Zend OPcache - it was already loaded'
+    && (echo 'Zend OpCache is configured twice' && exit 1)
+    || (echo 'Zend OpCache is configured correctly' && exit 0)
+
 after_failure:
   - docker exec --tty ${container_id} env TERM=xterm php -v
   - docker exec --tty ${container_id} env TERM=xterm php -i | grep 'memory_limit.*'
