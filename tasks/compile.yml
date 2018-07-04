@@ -49,7 +49,7 @@
 
 - name: 'Create ini file'
   template:
-    src: 'mods-available/{{ module.name }}.ini'
+    src: 'mods-available/{{ module.template | default("default") }}.ini'
     dest: '/etc/php/{{ php7_fpm_version }}/mods-available/{{ module.name }}.ini'
 
 - name: Enable module
