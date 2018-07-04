@@ -1,5 +1,22 @@
 ---
 
+- name: Install devel package
+  apt:
+    pkg: 'php{{ php7_fpm_version }}-dev'
+    state: present
+  when: php7_fpm_compile_modules|length
+
+- name: debug modules
+  debug:
+    msg: '{{ php7_fpm_compile_modules }}'
+
+- name: Compile modules from source
+  include_tasks: 'compile.yml'
+  when: php7_fpm_compile_modules is defined and php7_fpm_compile_modules|length
+  with_items: '{{ php7_fpm_compile_modules }}'
+  loop_control:
+    loop_var: module
+
 - name: Configure php7-fpm modules
   template:
     src: "{{ item }}"
@@ -11,14 +28,25 @@
   with_items: '{{php7_fpm_modules_config}}'
   notify: restart php{{ php7_fpm_version }}-fpm
 
-- name: enable php7 modules
-  command: phpenmod {{ item }}
-  args:
-    creates: "/etc/php/{{ php7_fpm_version }}/cli/conf.d/20-{{ item }}.ini"
-  with_items: '{{php7_fpm_modules}}'
-  changed_when: false # required for idempotence
+- name: Enable modules
+  notify: restart php{{ php7_fpm_version }}-fpm
+  command: 'phpenmod {{ item }}'
+  with_items: '{{ php7_fpm_default_enabled_packages  }}'
+  changed_when: false
 
-#- name: Configure OpCache
-#  template: src="mods-available/opcache.ini" dest="/etc/php/{{ php7_fpm_version }}/mods-available/opcache.ini" force=yes owner=root group=root mode=0644
-#  when: php_opcache_enabled_in_ini
-#  notify: restart php{{ php7_fpm_version }}-fpm
+#
+# REMOVE DUPLICATE SYMLINKS
+#
+- name: Check if multiple opcache.ini exist
+  stat:
+    path: /etc/php/{{ php7_fpm_version }}/fpm/conf.d/20-opcache.ini
+  register: opcache_file_exists
+
+- name: remove old opcache.ini files
+  file:
+    path: '{{ item }}'
+    state: absent
+  when: opcache_file_exists is defined and opcache_file_exists.stat.exists
+  with_items:
+    - '/etc/php/{{ php7_fpm_version }}/fpm/conf.d/10-opcache.ini'
+    - '/etc/php/{{ php7_fpm_version }}/cli/conf.d/10-opcache.ini'

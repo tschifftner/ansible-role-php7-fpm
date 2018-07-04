@@ -7,10 +7,12 @@
 - name: Include debian variables
   include_vars: debian.yml
   when: ansible_distribution == 'Debian'
+  tags: ['always']
 
 - name: Include ubuntu variables
   include_vars: ubuntu.yml
   when: ansible_distribution == 'Ubuntu'
+  tags: ['always']
 
 - include: install.yml
   tags: ['php7-fpm-install']

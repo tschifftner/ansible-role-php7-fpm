@@ -3,6 +3,9 @@
   remote_user: root
 
   vars:
+    php7_fpm_version: 7.0
+    php7_default_cli_version: '{{ php7_fpm_version }}'
+    php7_cli_ini_memory_limit: '192MB'
     php7_fpm_pools:
       - name: 'travis'
         user: 'www-data'
@@ -14,7 +17,8 @@
     php7_fpm_install_ioncube: true
 
   roles:
-    - ansible-role-php7-fpm
+    - tschifftner.sury
+    - role_under_test
 
   tasks:
     - name: Create index.php

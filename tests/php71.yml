@@ -1,0 +1,30 @@
+---
+- hosts: localhost
+  remote_user: root
+
+  vars:
+    php7_fpm_version: 7.1
+    php7_default_cli_version: '{{ php7_fpm_version }}'
+    php7_cli_ini_memory_limit: '192MB'
+    php7_fpm_pools:
+      - name: 'travis'
+        user: 'www-data'
+        group: 'www-data'
+        prefix: '/var/www/html'
+        logs_path: '/var/log/travis/'
+        project_paths: []
+        socket_file: '/run/travis.socket'
+    php7_fpm_install_ioncube: true
+
+  roles:
+    - tschifftner.sury
+    - role_under_test
+
+  tasks:
+    - name: Create index.php
+      copy:
+        content: '<?php phpinfo();'
+        dest: '{{ php7_fpm_pools.0.prefix }}/index.php'
+        owner: 'www-data'
+        group: 'www-data'
+        mode: '0644'

@@ -1,5 +1,5 @@
 ---
-php7_fpm_version: '7.1'
+php7_fpm_version: '7.0'
 php7_fpm_pin_version: 'php{{php7_fpm_version}}.*'
 #php7_default_cli_version: '{{ php7_fpm_version }}'
 
@@ -45,6 +45,7 @@ php7_fpm_pools:
     project_paths: []
 
 php7_fpm_cronjobs: []
+php7_fpm_modules_config: []
 
 # php.ini (cli) settings
 php7_cli_ini_expose_php: On
@@ -62,7 +63,7 @@ php7_cli_ini_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
 php7_cli_ini_display_errors: "Off"
 php7_cli_ini_display_startup_errors: "Off"
 php7_cli_ini_disable_functions: 'pcntl_alarm,pcntl_fork,pcntl_waitpid,pcntl_wait,pcntl_wifexited,pcntl_wifstopped,pcntl_wifsignaled,pcntl_wexitstatus,pcntl_wtermsig,pcntl_wstopsig,pcntl_signal,pcntl_signal_dispatch,pcntl_get_last_error,pcntl_strerror,pcntl_sigprocmask,pcntl_sigwaitinfo,pcntl_sigtimedwait,pcntl_exec,pcntl_getpriority,pcntl_setpriority,'
-
+php7_cli_ini_openssl: ''
 
 # php.ini (fpm) settings
 php7_fpm_ini_expose_php: On
@@ -79,6 +80,7 @@ php7_fpm_ini_sendmail_path: "/usr/sbin/sendmail -t -i"
 php7_fpm_ini_error_reporting: "E_ALL & ~E_DEPRECATED & ~E_STRICT"
 php7_fpm_ini_display_errors: "Off"
 php7_fpm_ini_display_startup_errors: "Off"
+php7_fpm_ini_openssl: ''
 
 # APCu
 php7_apcu_ini:
@@ -126,4 +128,4 @@ php7_opcache_ini:
   save_comments: "1"
 
 php7_fpm_install_ioncube: false
-php7_fpm_ioncube_download_url: 'http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz'
+php7_fpm_ioncube_download_url: 'http://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz'
