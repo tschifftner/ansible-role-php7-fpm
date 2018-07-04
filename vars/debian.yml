@@ -15,6 +15,7 @@ php7_fpm_default_packages:
   - fcgiwrap
   - php{{ php7_fpm_version }}-mysql
   - php{{ php7_fpm_version }}-mbstring
+  - zip
   - php{{ php7_fpm_version }}-zip
   - php{{ php7_fpm_version }}-soap
   - libxml2-utils
@@ -34,7 +35,6 @@ php7_fpm_compile_modules:
     apt_packages:
       - pkg-config
       - libmagickwand-dev
-
 
 php7_fpm_default_enabled_packages:
   - igbinary
