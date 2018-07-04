@@ -76,7 +76,7 @@ script:
 
   # Check php extensions
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'apcu'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'bc-math'
+  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'bcmath'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'calendar'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'ctype'
   - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'curl'
