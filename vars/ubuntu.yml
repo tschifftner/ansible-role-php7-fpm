@@ -1,14 +1,14 @@
 ---
 php7_fpm_default_packages:
+  - php{{ php7_fpm_version }}
+  - php{{ php7_fpm_version }}-bcmath
   - php{{ php7_fpm_version }}-fpm
   - php{{ php7_fpm_version }}-curl
   - php{{ php7_fpm_version }}-gd
   - php{{ php7_fpm_version }}-intl
-  - php-pear
-#  - php{{ php7_fpm_version }}-imagick
   - php{{ php7_fpm_version }}-imap
 #  - php{{ php7_fpm_version }}-mcrypt
-#  - php{{ php7_fpm_version }}-memcached
+  - php{{ php7_fpm_version }}-memcached
   - php{{ php7_fpm_version }}-redis
   - php{{ php7_fpm_version }}-pspell
   - php{{ php7_fpm_version }}-sqlite3
@@ -18,12 +18,20 @@ php7_fpm_default_packages:
   - php{{ php7_fpm_version }}-apcu
   - fcgiwrap
   - php{{ php7_fpm_version }}-mysql
+  - php{{ php7_fpm_version }}-mbstring
+  - zip
+  - php{{ php7_fpm_version }}-zip
+  - php{{ php7_fpm_version }}-soap
   - libxml2-utils
-  - php-apcu
+  - php-pear
   - php-redis
   - php-memcached
-#  - php-mcrypt
-  - php-imagick
+
+php7_fpm_compile_modules:
+  - url: 'https://pecl.php.net/get/mcrypt-1.0.1.tgz'
+    name: 'mcrypt'
+    apt_packages:
+      - libmcrypt-dev
 
 php7_fpm_default_enabled_packages:
   - igbinary
@@ -73,3 +81,8 @@ php7_fpm_default_enabled_packages:
   - xmlwriter
   - xsl
   - zip
+
+
+php7_fpm_modules_config:
+  - mods-available/apcu.ini
+  - mods-available/opcache.ini
