@@ -167,7 +167,7 @@ php7_opcache_ini:
 
 ## Dependencies
 
-None.
+ - [tschifftner.sury](https://github.com/tschifftner/ansible-role-sury)
 
 ## Example Playbook
 

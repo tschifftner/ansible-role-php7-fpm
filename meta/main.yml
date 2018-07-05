@@ -10,12 +10,13 @@ galaxy_info:
   platforms:
   - name: Debian
     versions:
-    - jessie
+    - 9 (stretch)
+    - 8 (jessie)
   - name: Ubuntu
     versions:
-    - precise
-    - trusty
+    - 18.04 LTS (Bionic Beaver)
   galaxy_tags:
     - ubuntu
     - debian
     - php7-fpm
+    - php7
