@@ -179,7 +179,7 @@ php7_opcache_ini:
 
  - Debian 9 (Stretch)
  - Debian 8 (Jessie)
- - Ubuntu 18.04
+ - Ubuntu 18.04 (Bionic Beaver)
  
 ## Required ansible version
 
