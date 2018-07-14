@@ -43,6 +43,7 @@ script:
   # Configure test script so we can run extra tests after playbook is run.
   - export container_id=$(date +%s)
   - export cleanup=false
+  - export DOCKER="docker exec --tty ${container_id} env TERM=xterm"
 
   # Download test shim.
   - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
@@ -52,89 +53,89 @@ script:
   - ${PWD}/tests/test.sh
 
   # Ensure PHP is installed and at the right version.
-  - 'docker exec --tty ${container_id} env TERM=xterm which php'
-  - 'docker exec --tty ${container_id} env TERM=xterm test -x /usr/bin/php'
+  - ${DOCKER} which php
+  - ${DOCKER} test -x /usr/bin/php
 
-  - 'docker exec --tty ${container_id} env TERM=xterm php --version'
-  - 'docker exec --tty ${container_id} env TERM=xterm /usr/bin/php --version | grep -qF "PHP ${php_version}"'
+  - ${DOCKER} php --version
+  - ${DOCKER} /usr/bin/php --version | grep -qF "PHP ${php_version}"
 
   # Check if socket exists
-  - 'docker exec --tty ${container_id} env TERM=xterm test -e /run/travis.socket'
+  - ${DOCKER} test -e /run/travis.socket
 
   # Check if OpCache is installed
-  - docker exec --tty ${container_id} env TERM=xterm php -v | grep 'ionCube'
+  - ${DOCKER} php -v | grep 'ionCube'
 
   # Check if ioncube is installed
-  - docker exec --tty ${container_id} env TERM=xterm php -v | grep 'OPcache'
+  - ${DOCKER} php -v | grep 'OPcache'
 
   # Ensure PHP configurations have taken effect.
-  - docker exec --tty ${container_id} env TERM=xterm php -i | grep 'memory_limit.*192'
+  - ${DOCKER} php -i | grep 'memory_limit.*192'
 
   # Check the status of PHP-FPM.
-  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm
-  - docker exec --tty ${container_id} env TERM=xterm systemctl --no-pager status php${php_version}-fpm | grep 'fpm.service; enabled'
+  - ${DOCKER} systemctl --no-pager status php${php_version}-fpm
+  - ${DOCKER} systemctl --no-pager status php${php_version}-fpm | grep 'fpm.service; enabled'
 
   # Check php extensions
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'apcu'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'bcmath'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'calendar'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'ctype'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'curl'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'dom'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'exif'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'fileinfo'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'ftp'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'gd'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'gettext'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'hash'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'iconv'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'igbinary'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'imagick'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'intl'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'json'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'libxml'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'mbstring'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'mcrypt'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'memcached'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'mysqli'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'mysqlnd'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'openssl'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'PDO'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'pdo_mysql'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'pdo_sqlite'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'Phar'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'redis'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'Reflection'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'session'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'SimpleXML'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'soap'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'sockets'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'SPL'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'sqlite3'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'standard'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'tidy'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'tokenizer'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'standard'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'xml'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'xmlreader'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'xmlrpc'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'xmlwriter'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'xsl'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'Zend OPcache'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'zip'
-  - docker exec --tty ${container_id} env TERM=xterm php -m | grep 'zlib'
+  - ${DOCKER} php -m | grep 'apcu'
+  - ${DOCKER} php -m | grep 'bcmath'
+  - ${DOCKER} php -m | grep 'calendar'
+  - ${DOCKER} php -m | grep 'ctype'
+  - ${DOCKER} php -m | grep 'curl'
+  - ${DOCKER} php -m | grep 'dom'
+  - ${DOCKER} php -m | grep 'exif'
+  - ${DOCKER} php -m | grep 'fileinfo'
+  - ${DOCKER} php -m | grep 'ftp'
+  - ${DOCKER} php -m | grep 'gd'
+  - ${DOCKER} php -m | grep 'gettext'
+  - ${DOCKER} php -m | grep 'hash'
+  - ${DOCKER} php -m | grep 'iconv'
+  - ${DOCKER} php -m | grep 'igbinary'
+  - ${DOCKER} php -m | grep 'imagick'
+  - ${DOCKER} php -m | grep 'intl'
+  - ${DOCKER} php -m | grep 'json'
+  - ${DOCKER} php -m | grep 'libxml'
+  - ${DOCKER} php -m | grep 'mbstring'
+  - ${DOCKER} php -m | grep 'mcrypt'
+  - ${DOCKER} php -m | grep 'memcached'
+  - ${DOCKER} php -m | grep 'mysqli'
+  - ${DOCKER} php -m | grep 'mysqlnd'
+  - ${DOCKER} php -m | grep 'openssl'
+  - ${DOCKER} php -m | grep 'PDO'
+  - ${DOCKER} php -m | grep 'pdo_mysql'
+  - ${DOCKER} php -m | grep 'pdo_sqlite'
+  - ${DOCKER} php -m | grep 'Phar'
+  - ${DOCKER} php -m | grep 'redis'
+  - ${DOCKER} php -m | grep 'Reflection'
+  - ${DOCKER} php -m | grep 'session'
+  - ${DOCKER} php -m | grep 'SimpleXML'
+  - ${DOCKER} php -m | grep 'soap'
+  - ${DOCKER} php -m | grep 'sockets'
+  - ${DOCKER} php -m | grep 'SPL'
+  - ${DOCKER} php -m | grep 'sqlite3'
+  - ${DOCKER} php -m | grep 'standard'
+  - ${DOCKER} php -m | grep 'tidy'
+  - ${DOCKER} php -m | grep 'tokenizer'
+  - ${DOCKER} php -m | grep 'standard'
+  - ${DOCKER} php -m | grep 'xml'
+  - ${DOCKER} php -m | grep 'xmlreader'
+  - ${DOCKER} php -m | grep 'xmlrpc'
+  - ${DOCKER} php -m | grep 'xmlwriter'
+  - ${DOCKER} php -m | grep 'xsl'
+  - ${DOCKER} php -m | grep 'Zend OPcache'
+  - ${DOCKER} php -m | grep 'zip'
+  - ${DOCKER} php -m | grep 'zlib'
 
   # Check Zend OpCache already loaded
   - >
-    docker exec --tty ${container_id} env TERM=xterm php -m | grep 'Cannot load Zend OPcache - it was already loaded'
+    ${DOCKER} php -m | grep 'Cannot load Zend OPcache - it was already loaded'
     && (echo 'Zend OpCache is configured twice' && exit 1)
     || (echo 'Zend OpCache is configured correctly' && exit 0)
 
 after_failure:
-  - docker exec --tty ${container_id} env TERM=xterm php -v
-  - docker exec --tty ${container_id} env TERM=xterm php -i | grep 'memory_limit.*'
-  - docker exec --tty ${container_id} env TERM=xterm php -m
-  - docker exec --tty ${container_id} env TERM=xterm apt-cache search php*
+  - ${DOCKER} php -v
+  - ${DOCKER} php -i | grep 'memory_limit.*'
+  - ${DOCKER} php -m
+  - ${DOCKER} apt-cache search php*
 
 notifications:
   slack: ambimax:2MlPTX9bY9aPxCPhJGxHKIT6
