@@ -25,6 +25,8 @@ php7_fpm_compile_modules:
   - url: 'http://pecl.php.net/get/apcu-5.1.11.tgz'
     name: 'apcu'
     template: 'apcu'
+    apt_packages:
+      - build-essential
   - url: 'https://pecl.php.net/get/mcrypt-1.0.1.tgz'
     name: 'mcrypt'
     apt_packages:
