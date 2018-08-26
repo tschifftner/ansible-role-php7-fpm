@@ -17,7 +17,6 @@
     php7_fpm_install_ioncube: true
 
   roles:
-    - tschifftner.sury
     - role_under_test
 
   tasks:

@@ -6,15 +6,17 @@ galaxy_info:
   description: Installs and configures php7-fpm on Debian/Ubuntu linux servers.
   company: ambimax® GmbH
   license: MIT
+  role_name: php7-fpm
   min_ansible_version: 2.5
   platforms:
   - name: Debian
     versions:
-    - 8 (Jessie)
-    - 9 (Stretch)
+    - jessie
+    - stretch
   - name: Ubuntu
     versions:
-    - 18.04 (Bionic Beaver)
+    - xenial
+    - bionic
   galaxy_tags:
     - ubuntu
     - debian
