@@ -11,9 +11,8 @@
 
 - name: Install required apt packages
   apt:
-    pkg: '{{ item }}'
+    pkg: '{{ module.apt_packages }}'
     state: present
-  with_items: '{{ module.apt_packages }}'
   when: module.apt_packages is defined and module.apt_packages|length
 
 - name: 'Extract {{ module.url }}'
