@@ -11,9 +11,8 @@
 
 - name: Install required apt packages
   apt:
-    pkg: '{{ item }}'
+    pkg: '{{ module.apt_packages }}'
     state: present
-  with_items: '{{ module.apt_packages }}'
   when: module.apt_packages is defined and module.apt_packages|length
 
 - name: 'Extract {{ module.url }}'
@@ -47,7 +46,7 @@
     chdir: "{{ unarchive_dir }}"
     creates: "/usr/lib/php/{{ php7_fpm_api_version }}/{{ module.name }}.so"
 
-- name: 'Create ini file'
+- name: 'Create {{ module.template | default("default") }} ini file for {{ module.name }}'
   template:
     src: 'mods-available/{{ module.template | default("default") }}.ini'
     dest: '/etc/php/{{ php7_fpm_version }}/mods-available/{{ module.name }}.ini'

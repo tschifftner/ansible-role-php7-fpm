@@ -9,7 +9,7 @@
     path: /etc/apt/preferences.d/php
     state: absent
 
-- name: Pin php7
+- name: Pin php7 to {{ php7_fpm_pin_version }}
   copy:
     dest: /etc/apt/preferences.d/php7
     content: |
@@ -33,8 +33,7 @@
 - name: Install php7 packages
   notify: restart php{{ php7_fpm_version }}-fpm
   apt:
-    name: "{{ item }}"
+    name: "{{ php7_fpm_packages }}"
     state: present
-  with_items: '{{php7_fpm_packages}}'
   when: php7_fpm_packages|length
 
