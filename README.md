@@ -165,6 +165,18 @@ php7_opcache_ini:
 
 ```
 
+## Multiple php versions
+
+```
+- hosts: projects-php7
+  become: true
+
+  roles:
+    - { role: tschifftner.sury, tags: ['sury'] }
+    - { role: tschifftner.php7-fpm, tags: ['php7-fpm', 'php7.0-fpm'], php7_fpm_version: '7.0' }
+    - { role: tschifftner.php7-fpm, tags: ['php7-fpm', 'php7.1-fpm'], php7_fpm_version: '7.1' }
+```
+
 ## Dependencies
 
  - [tschifftner.sury](https://github.com/tschifftner/ansible-role-sury)

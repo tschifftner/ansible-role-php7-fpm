@@ -9,7 +9,7 @@ php7_fpm_host_packages: []
 # Used for group packages
 php7_fpm_group_packages: []
 
-php7_fpm_pid: '/run/php7-fpm.pid'
+php7_fpm_pid: '/run/php{{php7_fpm_version}}-fpm.pid'
 php7_fpm_error_log: '/var/log/php7-fpm.log'
 php7_fpm_log_level: 'warning'
 php7_fpm_syslog_facility: ''

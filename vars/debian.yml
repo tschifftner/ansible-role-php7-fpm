@@ -22,7 +22,7 @@ php7_fpm_default_packages:
   - php-pear
 
 php7_fpm_compile_modules:
-  - url: 'http://pecl.php.net/get/apcu-5.1.11.tgz'
+  - url: 'http://pecl.php.net/get/apcu-5.1.15.tgz'
     name: 'apcu'
     template: 'apcu'
     apt_packages:
@@ -36,9 +36,9 @@ php7_fpm_compile_modules:
     apt_packages:
       - pkg-config
       - libmagickwand-dev
-  - url: 'https://pecl.php.net/get/redis-4.0.2.tgz'
+  - url: 'https://pecl.php.net/get/redis-4.2.0.tgz'
     name: 'redis'
-  - url: 'https://pecl.php.net/get/igbinary-2.0.7.tgz'
+  - url: 'https://pecl.php.net/get/igbinary-2.0.8.tgz'
     name: 'igbinary'
   - url: 'https://pecl.php.net/get/memcached-3.0.4.tgz'
     name: 'memcached'

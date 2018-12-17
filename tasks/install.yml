@@ -9,7 +9,7 @@
     path: /etc/apt/preferences.d/php
     state: absent
 
-- name: Pin php7
+- name: Pin php7 to {{ php7_fpm_pin_version }}
   copy:
     dest: /etc/apt/preferences.d/php7
     content: |
