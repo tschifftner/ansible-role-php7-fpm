@@ -50,3 +50,20 @@
   service:
     name: php7.2-fpm
     state: reloaded
+
+# PHP 7.3
+- name: start php7.3-fpm
+  service:
+    name: php7.3-fpm
+    state: started
+    enabled: yes
+
+- name: restart php7.3-fpm
+  service:
+    name: php7.3-fpm
+    state: restarted
+
+- name: reload php7.3-fpm
+  service:
+    name: php7.3-fpm
+    state: reloaded
