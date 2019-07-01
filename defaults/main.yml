@@ -1,6 +1,6 @@
 ---
 php7_fpm_version: '7.0'
-php7_fpm_pin_version: 'php{{php7_fpm_version}}.*'
+#php7_fpm_pin_version: 'php{{php7_fpm_version}}.*'
 #php7_default_cli_version: '{{ php7_fpm_version }}'
 
 # Used for host variables
