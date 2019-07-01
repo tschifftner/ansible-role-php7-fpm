@@ -18,6 +18,9 @@ env:
   - distro: debian9
     playbook: php72.yml
     php_version: 7.2
+  - distro: debian9
+    playbook: php73.yml
+    php_version: 7.3
 
   - distro: debian8
     playbook: php70.yml
@@ -28,6 +31,9 @@ env:
   - distro: debian8
     playbook: php72.yml
     php_version: 7.2
+  - distro: debian8
+    playbook: php73.yml
+    php_version: 7.3
 
   - distro: ubuntu1804
     playbook: php70.yml
@@ -38,6 +44,9 @@ env:
   - distro: ubuntu1804
     playbook: php72.yml
     php_version: 7.2
+  - distro: ubuntu1804
+    playbook: php73.yml
+    php_version: 7.3
 
 script:
   # Configure test script so we can run extra tests after playbook is run.
